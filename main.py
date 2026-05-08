@@ -16,7 +16,7 @@ def euclidean_distance(p1, p2) -> float:
 
 k = 10
 d = euclidean_distance
-points = evenly_growing_fixed_radius(k, 1000, 10, 0)
+points = evenly_growing_fixed_radius(1, 1000, 10, 1)
 #points = generate_points(20)
 
 offline_algos = [
