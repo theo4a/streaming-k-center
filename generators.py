@@ -115,10 +115,36 @@ def cluster_by_cluster_fixed_radius(k: int, n: int, r: float, seed: int) -> list
 
     return points
 
+
+# Nearly worst possible instanze for doubling
 def generate_points(n):
     points = []
 
-    for m in range(n + 1):
-        points.append((0, 2**m))
+    for m in range(1, n + 1):
+        points.append((0, 2**m + m))
+        points.append((0, -math.log(m, 2) + math.log(m, 2)))
+
+    return points
+
+def generate_pointss():
+    return [
+        (0, 1),
+        (0, 0),
+        (0, 3.1),
+    ]
+
+def generate_bad_instance(levels, eps=1e-3):
+    points = []
+
+    for i in range(levels):
+        base = 2 ** i
+
+        # dichter lokaler Cluster
+        points.append((0, base))
+        points.append((eps, base))
+        points.append((-eps, base))
+
+        # asymmetrischer Ausreißer
+        points.append((0, base + base / 2))
 
     return points

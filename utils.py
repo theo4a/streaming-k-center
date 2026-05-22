@@ -17,12 +17,10 @@ class Snapshot:
     solutions: list[Solution]
 
 
-def simulate(streaming_algos: list[str, object], offline_algos: list[str, object], points: list[object], snapshots_count: int, d: Callable, k: int) -> list[Snapshot]:
+def simulate(streaming_algos: list[str, object], offline_algos: list[str, object], points: list[object], snapshots_count: list, d: Callable, k: int) -> list[Snapshot]:
 
     snapshots: list[Snapshot] = []
     inserted_points: list[object] = []
-
-    step = max(1, len(points) // snapshots_count)
 
     for i, point in enumerate(points):
 
@@ -31,7 +29,8 @@ def simulate(streaming_algos: list[str, object], offline_algos: list[str, object
 
         inserted_points.append(point)
 
-        if i > k and i % step == 0:
+        if i == snapshots_count[0]-1:
+            snapshots_count.pop()
 
             solutions: list[Solution] = []
 
@@ -44,8 +43,10 @@ def simulate(streaming_algos: list[str, object], offline_algos: list[str, object
                 solutions.append(Solution(name, r, list(centers)))
 
             snapshots.append(Snapshot(list(inserted_points), list(solutions)))
+            snapshots.append(Snapshot(list(inserted_points), list(solutions)))
 
     return snapshots
+
 
 
 def plot(snapshots: list[Snapshot]) -> None:
