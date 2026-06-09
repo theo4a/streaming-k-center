@@ -1,7 +1,9 @@
 from typing import Callable
 
+from model.types import Solution, Point
 
-def gonzalez(k: int, d: Callable[[object, object], float], points: list[object]) -> tuple[float, list[object]]:
+
+def gonzalez(k: int, d: Callable[[Point, Point], float], points: list[Point]) -> Solution:
 
     if not points or k <= 0:
         return 0.0, []
@@ -23,4 +25,4 @@ def gonzalez(k: int, d: Callable[[object, object], float], points: list[object])
         for p in points
     )
 
-    return radius, centers
+    return Solution(radius = radius, centers = centers)

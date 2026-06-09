@@ -1,0 +1,17 @@
+{
+    "euclidean": {
+        "doubling_r": 102.5344863565651,
+        "p_scaling_r": 60.731473925966974,
+        "gonzales_r": 61.12887736933878
+    },
+    "manhattan": {
+        "doubling_r": 133.06496601362113,
+        "p_scaling_r": 78.30810038154877,
+        "gonzales_r": 78.69357411615391
+    },
+    "chebyshev": {
+        "doubling_r": 88.47937910574424,
+        "p_scaling_r": 54.917811826412645,
+        "gonzales_r": 53.85856756160388
+    }
+}
