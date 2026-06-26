@@ -45,7 +45,7 @@ class ParallelizedScalingKCenter(StreamingKCenter):
         # Gibt das Ergebnis der Instanz mit dem geringsten Radius zurück
         return min(
             (inst.query() for inst in self._instances),
-            key=lambda x: x[0]
+            key=lambda x: x.radius
         )
 
 

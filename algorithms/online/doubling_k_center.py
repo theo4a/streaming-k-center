@@ -33,8 +33,9 @@ class DoublingKCenter(StreamingKCenter):
                 # Nächste Phase startet ab hier
                 self._merge_stage()
 
+
     def query(self) -> Solution:
-        return self.alpha * 2 * self.r, self.centers
+        return Solution(radius=self.alpha * 2 * self.r, centers=self.centers)
 
 
     def _initialize(self) -> None:

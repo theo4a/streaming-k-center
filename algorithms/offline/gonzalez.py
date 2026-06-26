@@ -1,3 +1,4 @@
+import random
 from typing import Callable
 
 from model.types import Solution, Point
@@ -9,7 +10,7 @@ def gonzalez(k: int, d: Callable[[Point, Point], float], points: list[Point]) ->
         return 0.0, []
 
     # Wähle ein beliebiges Startzentrum (z.B. erstes Element)
-    centers = [points[0]]
+    centers = [random.choice(points)]
 
     # Wähle iterativ das am weitesten entfernte Element als neues Zentrum
     while len(centers) < k:

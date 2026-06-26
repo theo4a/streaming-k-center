@@ -1,4 +1,4 @@
 
-from experiments.experiments import test_k, test_k_with_fixed_n, average_worst_case, test_metrics
+from experiments.experiments import test_cluster_std, test_dimension, test_m, test_k, test_metrics
 
-test_metrics()
+test_k()
