@@ -73,7 +73,7 @@ def test_cluster_std() -> None:
             results[str(cluster_sd)]["psa_c_r"].append(psa_c_r)
 
     # Save results
-    write_json("cluster_sd", results)
+    write_json("temp", results)
 
 def test_k() -> None:
 
