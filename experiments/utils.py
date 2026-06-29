@@ -6,19 +6,6 @@ from typing import Callable
 from algorithms.online.streaming_k_center import StreamingKCenter
 from model.types import Solution, Point
 
-def simulate_offline(
-    k: int,
-    d: Callable,
-    offline_algo: Callable,
-    points: list[Point],
-) -> Solution:
-    
-    solution: Solution
-    for i in range(len(points)):
-        if i > k:
-            solution = offline_algo(k, d, points[:i])
-
-    return solution
 
 def simulate_streaming(
     streaming_algo: StreamingKCenter,

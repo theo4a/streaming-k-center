@@ -63,7 +63,7 @@ class ParallelizedScalingKCenter(StreamingKCenter):
                 k=self.k,
                 d=self.d,
                 beta=self.beta,
-                r0=r1 * (self.beta ** ((i / self.m) - 1)),
+                r1=r1 * (self.beta ** ((i / self.m) - 1)),
             )
             for i in range(1, self.m + 1)
         ]

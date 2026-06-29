@@ -3,6 +3,7 @@ import time
 
 from algorithms.offline.gonzalez import gonzalez
 from algorithms.online.doubling_k_center import DoublingKCenter
+from algorithms.online.randomized_doubling_k_center import RandomizedDoublingKCenter
 from algorithms.online.scaling_k_center_parallelized import ParallelizedScalingKCenter
 from benchmarks.metrics import chebyshev_distance, euclidean_distance, manhattan_distance
 from benchmarks.synthetic.points import generate_clustered_points
@@ -25,9 +26,15 @@ def test_cluster_std() -> None:
         results[str(cluster_sd)] = {
             "gonzalez_sec": [],
             "gonzalez_r": [],
+
             "da_sec": [],
             "da_r": [],
             "da_c_r": [],
+
+            "rda_sec": [],
+            "rda_r": [],
+            "rda_c_r": [],
+
             "psa_sec": [],
             "psa_r": [],
             "psa_c_r": [],
@@ -62,6 +69,16 @@ def test_cluster_std() -> None:
             results[str(cluster_sd)]["da_r"].append(da_solution.radius)
             results[str(cluster_sd)]["da_c_r"].append(da_c_r)
 
+            # RDA
+            rda = RandomizedDoublingKCenter(k=k, d=d)
+            rda_start = time.perf_counter()
+            rda_solution = simulate_streaming(rda, points)
+            rda_end = time.perf_counter()
+            rda_c_r = check_radius(d, points, rda_solution.centers)
+            results[str(cluster_sd)]["rda_sec"].append(rda_end - rda_start)
+            results[str(cluster_sd)]["rda_r"].append(rda_solution.radius)
+            results[str(cluster_sd)]["rda_c_r"].append(rda_c_r)
+
             # PSA
             psa = ParallelizedScalingKCenter(k=k, d=d, m=psa_m)
             psa_start = time.perf_counter()
@@ -73,7 +90,7 @@ def test_cluster_std() -> None:
             results[str(cluster_sd)]["psa_c_r"].append(psa_c_r)
 
     # Save results
-    write_json("temp", results)
+    write_json("cluster_sd_comparison", results)
 
 def test_k() -> None:
 
@@ -90,9 +107,15 @@ def test_k() -> None:
         results[str(k)] = {
             "gonzalez_sec": [],
             "gonzalez_r": [],
+
             "da_sec": [],
             "da_r": [],
             "da_c_r": [],
+
+            "rda_sec": [],
+            "rda_r": [],
+            "rda_c_r": [],
+
             "psa_sec": [],
             "psa_r": [],
             "psa_c_r": [],
@@ -127,6 +150,16 @@ def test_k() -> None:
             results[str(k)]["da_r"].append(da_solution.radius)
             results[str(k)]["da_c_r"].append(da_c_r)
 
+            # RDA
+            rda = RandomizedDoublingKCenter(k=k, d=d)
+            rda_start = time.perf_counter()
+            rda_solution = simulate_streaming(rda, points)
+            rda_end = time.perf_counter()
+            rda_c_r = check_radius(d, points, rda_solution.centers)
+            results[str(k)]["rda_sec"].append(rda_end - rda_start)
+            results[str(k)]["rda_r"].append(rda_solution.radius)
+            results[str(k)]["rda_c_r"].append(rda_c_r)
+
             # PSA
             psa = ParallelizedScalingKCenter(k=k, d=d, m=psa_m)
             psa_start = time.perf_counter()
@@ -138,7 +171,7 @@ def test_k() -> None:
             results[str(k)]["psa_c_r"].append(psa_c_r)
 
     # Save results
-    write_json("k", results)
+    write_json("k_comparison", results)
 
 def test_metrics() -> None:
 
@@ -158,9 +191,15 @@ def test_metrics() -> None:
         results[metric_name] = {
             "gonzalez_sec": [],
             "gonzalez_r": [],
+
             "da_sec": [],
             "da_r": [],
             "da_c_r": [],
+
+            "rda_sec": [],
+            "rda_r": [],
+            "rda_c_r": [],
+
             "psa_sec": [],
             "psa_r": [],
             "psa_c_r": [],
@@ -194,6 +233,16 @@ def test_metrics() -> None:
             results[str(metric_name)]["da_r"].append(da_solution.radius)
             results[str(metric_name)]["da_c_r"].append(da_c_r)
 
+            # RDA
+            rda = DoublingKCenter(k=k, d=d)
+            rda_start = time.perf_counter()
+            rda_solution = simulate_streaming(rda, points)
+            rda_end = time.perf_counter()
+            rda_c_r = check_radius(d, points, rda_solution.centers)
+            results[str(metric_name)]["rda_sec"].append(rda_end - rda_start)
+            results[str(metric_name)]["rda_r"].append(rda_solution.radius)
+            results[str(metric_name)]["rda_c_r"].append(rda_c_r)
+
             # PSA
             psa = ParallelizedScalingKCenter(k=k, d=d, m=psa_m)
             psa_start = time.perf_counter()
@@ -205,12 +254,12 @@ def test_metrics() -> None:
             results[str(metric_name)]["psa_c_r"].append(psa_c_r)
 
     # Save results
-    write_json("metrics", results)
+    write_json("metrics_comparison", results)
 
 def test_dimension() -> None:
 
     n = 100
-    k = 5
+    k = 10
     sample_size = 100
     dims = [2, 4, 8, 16, 32, 64, 128, 256]
     d = euclidean_distance
@@ -222,9 +271,15 @@ def test_dimension() -> None:
         results[str(dim)] = {
             "gonzalez_sec": [],
             "gonzalez_r": [],
+
             "da_sec": [],
             "da_r": [],
             "da_c_r": [],
+
+            "rda_sec": [],
+            "rda_r": [],
+            "rda_c_r": [],
+
             "psa_sec": [],
             "psa_r": [],
             "psa_c_r": [],
@@ -259,6 +314,16 @@ def test_dimension() -> None:
             results[str(dim)]["da_r"].append(da_solution.radius)
             results[str(dim)]["da_c_r"].append(da_c_r)
 
+            # RDA
+            rda = RandomizedDoublingKCenter(k=k, d=d)
+            rda_start = time.perf_counter()
+            rda_solution = simulate_streaming(rda, points)
+            rda_end = time.perf_counter()
+            rda_c_r = check_radius(d, points, rda_solution.centers)
+            results[str(dim)]["rda_sec"].append(rda_end - rda_start)
+            results[str(dim)]["rda_r"].append(rda_solution.radius)
+            results[str(dim)]["rda_c_r"].append(rda_c_r)
+
             # PSA
             psa = ParallelizedScalingKCenter(k=k, d=d, m=psa_m)
             psa_start = time.perf_counter()
@@ -271,12 +336,12 @@ def test_dimension() -> None:
 
 
     # Save results
-    write_json("dim", results)
+    write_json("dimension_comparison", results)
 
-def test_m() -> None:
+def test_m_cluster_sd_8() -> None:
 
     n = 500
-    k = 5
+    k = 10
     sample_size = 100
     psa_ms = [1, 2, 4, 8, 16, 32, 64, 128, 256]
     d = euclidean_distance
@@ -313,5 +378,47 @@ def test_m() -> None:
             results[str(m)]["psa_c_r"].append(psa_c_r)
 
     # Save results
-    write_json("m_8", results)
+    write_json("m_comparison_cluster_sd_8", results)
+
+def test_m_cluster_sd_1() -> None:
+
+    n = 500
+    k = 10
+    sample_size = 100
+    psa_ms = [1, 2, 4, 8, 16, 32, 64, 128, 256]
+    d = euclidean_distance
+
+    results: dict[str, dict[str, list[float]]] = {}
+
+    for m in psa_ms:
+        results[str(m)] = {
+            "psa_sec": [],
+            "psa_r": [],
+            "psa_c_r": []
+        }
+
+        for i in range(sample_size):
+            print(i)
+
+            points = generate_clustered_points(
+                k=k,
+                n=n,
+                cluster_std=1,
+                dim=2,
+                center_std=10,
+                seed=i
+            )
+
+            # PSA
+            psa = ParallelizedScalingKCenter(k=k, d=d, m=m)
+            psa_start = time.perf_counter()
+            psa_solution = simulate_streaming(psa, points)
+            psa_end = time.perf_counter()
+            psa_c_r = check_radius(d, points, psa_solution.centers)
+            results[str(m)]["psa_sec"].append(psa_end - psa_start)
+            results[str(m)]["psa_r"].append(psa_solution.radius)
+            results[str(m)]["psa_c_r"].append(psa_c_r)
+
+    # Save results
+    write_json("m_comparison_cluster_sd_1", results)
 

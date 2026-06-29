@@ -1,0 +1,47 @@
+{
+  "euclidean": {
+    "gonzalez_r_mean": 5.687790140841617,
+    "da_r_mean": 10.33154776439916,
+    "da_r_mean/gonzalez_r_mean": 1.8164432070397045,
+    "da_c_r_mean": 5.410025863456089,
+    "da_c_r_mean/gonzalez_r_mean": 0.9511648161223424,
+    "rda_r_mean": 10.33154776439916,
+    "rda_r_mean/gonzalez_r_mean": 1.8164432070397045,
+    "rda_c_r_mean": 5.410025863456089,
+    "rda_c_r_mean/gonzalez_r_mean": 0.9511648161223424,
+    "psa_r_mean": 5.578885529944184,
+    "psa_r_mean/gonzalez_r_mean": 0.9808529133106662,
+    "psa_c_r_mean": 5.015136819529524,
+    "psa_c_r_mean/gonzalez_r_mean": 0.8817373171907217
+  },
+  "manhattan": {
+    "gonzalez_r_mean": 7.4617831018228085,
+    "da_r_mean": 13.45347589611903,
+    "da_r_mean/gonzalez_r_mean": 1.8029840471820382,
+    "da_c_r_mean": 7.331140953903507,
+    "da_c_r_mean/gonzalez_r_mean": 0.9824918325638027,
+    "rda_r_mean": 13.45347589611903,
+    "rda_r_mean/gonzalez_r_mean": 1.8029840471820382,
+    "rda_c_r_mean": 7.331140953903507,
+    "rda_c_r_mean/gonzalez_r_mean": 0.9824918325638027,
+    "psa_r_mean": 7.3104687263505586,
+    "psa_r_mean/gonzalez_r_mean": 0.9797214186733348,
+    "psa_c_r_mean": 6.6487226910610495,
+    "psa_c_r_mean/gonzalez_r_mean": 0.8910367133878309
+  },
+  "chebyshev": {
+    "gonzalez_r_mean": 5.375452054827727,
+    "da_r_mean": 9.060331626313955,
+    "da_r_mean/gonzalez_r_mean": 1.6855013371715992,
+    "da_c_r_mean": 5.182337110984516,
+    "da_c_r_mean/gonzalez_r_mean": 0.9640746597916777,
+    "rda_r_mean": 9.060331626313955,
+    "rda_r_mean/gonzalez_r_mean": 1.6855013371715992,
+    "rda_c_r_mean": 5.182337110984516,
+    "rda_c_r_mean/gonzalez_r_mean": 0.9640746597916777,
+    "psa_r_mean": 5.167579764355411,
+    "psa_r_mean/gonzalez_r_mean": 0.9613293378208768,
+    "psa_c_r_mean": 4.712798344409008,
+    "psa_c_r_mean/gonzalez_r_mean": 0.8767259565037724
+  }
+}

@@ -16,13 +16,10 @@ class DoublingKCenter(StreamingKCenter):
         self.alpha: float = 2
         self.beta: float = 2
 
-        self.centers: list[Point] = []
         self.r: float = 0
 
-        # NEU: Heap speichert (distanz, id_a, id_b) — O(log k) push/pop
-        self.heap: list[tuple[float, int, int]] = []
-        # NEU: id(Point) → Point, damit wir nach Heap-Pop das Objekt finden
-        self.center_map: dict[int, Point] = {}
+        self.distances: list[tuple[float, int, int]] = []
+        self.centers: dict[int, Point] = {}
 
         self._initialized = False
 
@@ -30,7 +27,7 @@ class DoublingKCenter(StreamingKCenter):
     def insert(self, point: Point) -> None:
 
         if not self._initialized:
-            self.centers.append(point)
+            self.centers[id(point)] = point
             if len(self.centers) == self.k + 1:
                 self._initialize()
         else:
@@ -40,21 +37,19 @@ class DoublingKCenter(StreamingKCenter):
 
 
     def query(self) -> Solution:
-        return Solution(radius=self.alpha * self.r, centers=self.centers)
+        return Solution(radius=self.alpha * 2 * self.r, centers=list(self.centers.values()))
 
 
     def _initialize(self) -> None:
 
-        min_dist = min(self.d(a, b) for a, b in combinations(self.centers, 2))
+        points = list(self.centers.values())
+        min_dist = min(self.d(a, b) for a, b in combinations(points, 2))
         self.r = min_dist / 2
 
-        # NEU: center_map aufbauen
-        self.center_map = {id(c): c for c in self.centers}
+        self.centers = {id(c): c for c in points}
 
-        # NEU: alle O(k²) Kanten einmalig in Heap einfügen
-        # Jede Kante bekommt log k Credits (amortisierte Analyse aus Theorem 8)
-        for a, b in combinations(self.centers, 2):
-            heapq.heappush(self.heap, (self.d(a, b), id(a), id(b)))
+        for a, b in combinations(points, 2):
+            heapq.heappush(self.distances, (self.d(a, b), id(a), id(b)))
 
         self._merge_stage()
         self._initialized = True
@@ -62,60 +57,36 @@ class DoublingKCenter(StreamingKCenter):
 
     def _merge_stage(self) -> None:
 
-        # r verdoppeln → das ist d_{i+1} = β · d_i
         self.r *= self.beta
-        threshold = self.r
 
-        # ERSETZT: die O(k²)-while-Schleife mit List-Comprehension
-        # NEU: Kanten aus Heap extrahieren, die unter dem Threshold liegen
-        # Kosten: O(m log k), gedeckt durch die log-k-Credits der Kanten
-        merged_into: dict[int, int] = {}  # id_b → id_a (wer wird in wen gemergt)
+        merged_centers: set = set()
 
-        while self.heap and self.heap[0][0] <= threshold:
-            dist, id_a, id_b = heapq.heappop(self.heap)
+        while self.distances and self.distances[0][0] <= 2 * self.r:
+            dist, id_a, id_b = heapq.heappop(self.distances)
 
-            # Überspringe, falls eines der Zentren bereits gemergt wurde
-            # (Union-Find wäre noch sauberer, reicht hier aber für k klein)
-            root_a = self._find_root(id_a, merged_into)
-            root_b = self._find_root(id_b, merged_into)
+            if id_a not in self.centers or id_b not in self.centers:
+                continue
 
-            if root_a != root_b:
-                # b in a mergen: b aus aktiven Zentren entfernen
-                merged_into[root_b] = root_a
+            if id_a not in merged_centers and id_b not in merged_centers:
+                self.centers.pop(id_b)
+                merged_centers.add(id_a)
 
-        # Zentrumsliste aus center_map neu aufbauen — nur nicht-gemergde Zentren
-        active_ids = {
-            self._find_root(cid, merged_into)
-            for cid in list(self.center_map.keys())
-        }
-        self.centers = [self.center_map[cid] for cid in active_ids
-                        if cid in self.center_map]
-        self.center_map = {id(c): c for c in self.centers}
+            elif id_a in merged_centers and id_b not in merged_centers:
+                self.centers.pop(id_b)
 
-
-    def _find_root(self, cid: int, merged_into: dict[int, int]) -> int:
-        # Pfadkompression für Union-Find
-        while cid in merged_into:
-            merged_into[cid] = merged_into.get(merged_into[cid], merged_into[cid])
-            cid = merged_into[cid]
-        return cid
+            elif id_a not in merged_centers and id_b in merged_centers:
+                self.centers.pop(id_a)
 
 
     def _update_stage(self, point: Point) -> None:
 
         if not self.centers:
-            self.centers.append(point)
-            self.center_map[id(point)] = point
+            self.centers[id(point)] = point
             return
 
-        closest = min(self.centers, key=lambda c: self.d(c, point))
+        closest = min(self.centers.values(), key=lambda c: self.d(c, point))
 
-        # ANGEPASST: Grenze ist α · r (nicht α · 2 · r wie vorher)
-        if self.d(closest, point) > self.alpha * self.r:
-            # NEU: neues Zentrum → O(k) Distanzen berechnen + O(k log k) in Heap
-            # Jede neue Kante bekommt log k Credits für die spätere Merge Stage
-            for c in self.centers:
-                heapq.heappush(self.heap, (self.d(c, point), id(c), id(point)))
-
-            self.centers.append(point)
-            self.center_map[id(point)] = point
+        if self.d(closest, point) > self.alpha * 2 * self.r:
+            for c in self.centers.values():
+                heapq.heappush(self.distances, (self.d(c, point), id(c), id(point)))
+            self.centers[id(point)] = point
