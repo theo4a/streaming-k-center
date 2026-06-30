@@ -1,3 +1,4 @@
+import csv
 import json
 import os
 import statistics
@@ -16,36 +17,33 @@ def overview_cluster_sd_comparison() -> None:
     with open(input_path, "r") as f:
         results = json.load(f)
 
-    analyzed: dict = {}
-
-    for cluster_sd, value in results.items():
-
-        analyzed[cluster_sd] = {
-            "gonzalez_r_mean": statistics.mean(value["gonzalez_r"]),
-            "da_r_mean": statistics.mean(value["da_r"]),
-            "da_r_mean/gonzalez_r_mean": statistics.mean(value["da_r"]) / statistics.mean(value["gonzalez_r"]),
-            "da_c_r_mean": statistics.mean(value["da_c_r"]),
-            "da_c_r_mean/gonzalez_r_mean": statistics.mean(value["da_c_r"]) / statistics.mean(value["gonzalez_r"]),
-            "rda_r_mean": statistics.mean(value["rda_r"]),
-            "rda_r_mean/gonzalez_r_mean": statistics.mean(value["rda_r"]) / statistics.mean(value["gonzalez_r"]),
-            "rda_c_r_mean": statistics.mean(value["rda_c_r"]),
-            "rda_c_r_mean/gonzalez_r_mean": statistics.mean(value["rda_c_r"]) / statistics.mean(value["gonzalez_r"]),
-            "psa_r_mean": statistics.mean(value["psa_r"]),
-            "psa_r_mean/gonzalez_r_mean": statistics.mean(value["psa_r"]) / statistics.mean(value["gonzalez_r"]),
-            "psa_c_r_mean": statistics.mean(value["psa_c_r"]),
-            "psa_c_r_mean/gonzalez_r_mean": statistics.mean(value["psa_c_r"]) / statistics.mean(value["gonzalez_r"]),
-        }
-
     output_path = os.path.join(
         os.path.dirname(__file__),
         "..",
         "results",
         "overview",
-        "cluster_sd_comparison.json"
+        "cluster_sd_comparison.csv"
     )
 
-    with open(output_path, "w") as f:
-        json.dump(analyzed, f, indent=2)
+    fieldnames = [
+        "cluster_sd",
+        "gonzalez_r_mean",
+        "da_r_mean/gonzalez_r_mean",
+        "psa_r_mean/gonzalez_r_mean",
+    ]
+
+    with open(output_path, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+
+        for cluster_sd, value in results.items():
+            gonzalez_r_mean = statistics.mean(value["gonzalez_r"])
+            writer.writerow({
+                "cluster_sd": cluster_sd,
+                "gonzalez_r_mean": gonzalez_r_mean,
+                "da_r_mean/gonzalez_r_mean": statistics.mean(value["da_r"]) / gonzalez_r_mean,
+                "psa_r_mean/gonzalez_r_mean": statistics.mean(value["psa_r"]) / gonzalez_r_mean,
+            })
 
 def overview_dimension_comparison() -> None:
 
@@ -60,36 +58,33 @@ def overview_dimension_comparison() -> None:
     with open(input_path, "r") as f:
         results = json.load(f)
 
-    analyzed: dict = {}
-
-    for dimensions, value in results.items():
-
-        analyzed[dimensions] = {
-            "gonzalez_r_mean": statistics.mean(value["gonzalez_r"]),
-            "da_r_mean": statistics.mean(value["da_r"]),
-            "da_r_mean/gonzalez_r_mean": statistics.mean(value["da_r"]) / statistics.mean(value["gonzalez_r"]),
-            "da_c_r_mean": statistics.mean(value["da_c_r"]),
-            "da_c_r_mean/gonzalez_r_mean": statistics.mean(value["da_c_r"]) / statistics.mean(value["gonzalez_r"]),
-            "rda_r_mean": statistics.mean(value["rda_r"]),
-            "rda_r_mean/gonzalez_r_mean": statistics.mean(value["rda_r"]) / statistics.mean(value["gonzalez_r"]),
-            "rda_c_r_mean": statistics.mean(value["rda_c_r"]),
-            "rda_c_r_mean/gonzalez_r_mean": statistics.mean(value["rda_c_r"]) / statistics.mean(value["gonzalez_r"]),
-            "psa_r_mean": statistics.mean(value["psa_r"]),
-            "psa_r_mean/gonzalez_r_mean": statistics.mean(value["psa_r"]) / statistics.mean(value["gonzalez_r"]),
-            "psa_c_r_mean": statistics.mean(value["psa_c_r"]),
-            "psa_c_r_mean/gonzalez_r_mean": statistics.mean(value["psa_c_r"]) / statistics.mean(value["gonzalez_r"]),
-        }
-
     output_path = os.path.join(
         os.path.dirname(__file__),
         "..",
         "results",
         "overview",
-        "dimension_comparison.json"
+        "dimension_comparison.csv"
     )
 
-    with open(output_path, "w") as f:
-        json.dump(analyzed, f, indent=2)
+    fieldnames = [
+        "dimensions",
+        "gonzalez_r_mean",
+        "da_r_mean/gonzalez_r_mean",
+        "psa_r_mean/gonzalez_r_mean",
+    ]
+
+    with open(output_path, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+
+        for dimensions, value in results.items():
+            gonzalez_r_mean = statistics.mean(value["gonzalez_r"])
+            writer.writerow({
+                "dimensions": dimensions,
+                "gonzalez_r_mean": gonzalez_r_mean,
+                "da_r_mean/gonzalez_r_mean": statistics.mean(value["da_r"]) / gonzalez_r_mean,
+                "psa_r_mean/gonzalez_r_mean": statistics.mean(value["psa_r"]) / gonzalez_r_mean,
+            })
 
 def overview_k_comparison() -> None:
 
@@ -104,36 +99,33 @@ def overview_k_comparison() -> None:
     with open(input_path, "r") as f:
         results = json.load(f)
 
-    analyzed: dict = {}
-
-    for k, value in results.items():
-
-        analyzed[k] = {
-            "gonzalez_r_mean": statistics.mean(value["gonzalez_r"]),
-            "da_r_mean": statistics.mean(value["da_r"]),
-            "da_r_mean/gonzalez_r_mean": statistics.mean(value["da_r"]) / statistics.mean(value["gonzalez_r"]),
-            "da_c_r_mean": statistics.mean(value["da_c_r"]),
-            "da_c_r_mean/gonzalez_r_mean": statistics.mean(value["da_c_r"]) / statistics.mean(value["gonzalez_r"]),
-            "rda_r_mean": statistics.mean(value["rda_r"]),
-            "rda_r_mean/gonzalez_r_mean": statistics.mean(value["rda_r"]) / statistics.mean(value["gonzalez_r"]),
-            "rda_c_r_mean": statistics.mean(value["rda_c_r"]),
-            "rda_c_r_mean/gonzalez_r_mean": statistics.mean(value["rda_c_r"]) / statistics.mean(value["gonzalez_r"]),
-            "psa_r_mean": statistics.mean(value["psa_r"]),
-            "psa_r_mean/gonzalez_r_mean": statistics.mean(value["psa_r"]) / statistics.mean(value["gonzalez_r"]),
-            "psa_c_r_mean": statistics.mean(value["psa_c_r"]),
-            "psa_c_r_mean/gonzalez_r_mean": statistics.mean(value["psa_c_r"]) / statistics.mean(value["gonzalez_r"]),
-        }
-
     output_path = os.path.join(
         os.path.dirname(__file__),
         "..",
         "results",
         "overview",
-        "k_comparison.json"
+        "k_comparison.csv"
     )
 
-    with open(output_path, "w") as f:
-        json.dump(analyzed, f, indent=2)
+    fieldnames = [
+        "k",
+        "gonzalez_r_mean",
+        "da_r_mean/gonzalez_r_mean",
+        "psa_r_mean/gonzalez_r_mean",
+    ]
+
+    with open(output_path, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+
+        for k, value in results.items():
+            gonzalez_r_mean = statistics.mean(value["gonzalez_r"])
+            writer.writerow({
+                "k": k,
+                "gonzalez_r_mean": gonzalez_r_mean,
+                "da_r_mean/gonzalez_r_mean": statistics.mean(value["da_r"]) / gonzalez_r_mean,
+                "psa_r_mean/gonzalez_r_mean": statistics.mean(value["psa_r"]) / gonzalez_r_mean,
+            })
 
 def overview_m_comparison_cluster_sd_1() -> None:
 
@@ -148,25 +140,30 @@ def overview_m_comparison_cluster_sd_1() -> None:
     with open(input_path, "r") as f:
         results = json.load(f)
 
-    analyzed: dict = {}
-
-    for m, value in results.items():
-
-        analyzed[m] = {
-            "psa_r_mean": statistics.mean(value["psa_r"]),
-            "psa_c_r_mean": statistics.mean(value["psa_c_r"]),
-        }
-
     output_path = os.path.join(
         os.path.dirname(__file__),
         "..",
         "results",
         "overview",
-        "m_comparison_cluster_sd_1.json"
+        "m_comparison_cluster_sd_1.csv"
     )
 
-    with open(output_path, "w") as f:
-        json.dump(analyzed, f, indent=2)
+    fieldnames = [
+        "m",
+        "psa_r_mean",
+        "psa_c_r_mean",
+    ]
+
+    with open(output_path, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+
+        for m, value in results.items():
+            writer.writerow({
+                "m": m,
+                "psa_r_mean": statistics.mean(value["psa_r"]),
+                "psa_c_r_mean": statistics.mean(value["psa_c_r"]),
+            })
 
 def overview_m_comparison_cluster_sd_8() -> None:
 
@@ -181,25 +178,30 @@ def overview_m_comparison_cluster_sd_8() -> None:
     with open(input_path, "r") as f:
         results = json.load(f)
 
-    analyzed: dict = {}
-
-    for m, value in results.items():
-
-        analyzed[m] = {
-            "psa_r_mean": statistics.mean(value["psa_r"]),
-            "psa_c_r_mean": statistics.mean(value["psa_c_r"]),
-        }
-
     output_path = os.path.join(
         os.path.dirname(__file__),
         "..",
         "results",
         "overview",
-        "m_comparison_cluster_sd_8.json"
+        "m_comparison_cluster_sd_8.csv"
     )
 
-    with open(output_path, "w") as f:
-        json.dump(analyzed, f, indent=2)
+    fieldnames = [
+        "m",
+        "psa_r_mean",
+        "psa_c_r_mean",
+    ]
+
+    with open(output_path, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+
+        for m, value in results.items():
+            writer.writerow({
+                "m": m,
+                "psa_r_mean": statistics.mean(value["psa_r"]),
+                "psa_c_r_mean": statistics.mean(value["psa_c_r"]),
+            })
 
 def overview_metrics_comparison() -> None:
 
@@ -214,33 +216,30 @@ def overview_metrics_comparison() -> None:
     with open(input_path, "r") as f:
         results = json.load(f)
 
-    analyzed: dict = {}
-
-    for k, value in results.items():
-
-        analyzed[k] = {
-            "gonzalez_r_mean": statistics.mean(value["gonzalez_r"]),
-            "da_r_mean": statistics.mean(value["da_r"]),
-            "da_r_mean/gonzalez_r_mean": statistics.mean(value["da_r"]) / statistics.mean(value["gonzalez_r"]),
-            "da_c_r_mean": statistics.mean(value["da_c_r"]),
-            "da_c_r_mean/gonzalez_r_mean": statistics.mean(value["da_c_r"]) / statistics.mean(value["gonzalez_r"]),
-            "rda_r_mean": statistics.mean(value["rda_r"]),
-            "rda_r_mean/gonzalez_r_mean": statistics.mean(value["rda_r"]) / statistics.mean(value["gonzalez_r"]),
-            "rda_c_r_mean": statistics.mean(value["rda_c_r"]),
-            "rda_c_r_mean/gonzalez_r_mean": statistics.mean(value["rda_c_r"]) / statistics.mean(value["gonzalez_r"]),
-            "psa_r_mean": statistics.mean(value["psa_r"]),
-            "psa_r_mean/gonzalez_r_mean": statistics.mean(value["psa_r"]) / statistics.mean(value["gonzalez_r"]),
-            "psa_c_r_mean": statistics.mean(value["psa_c_r"]),
-            "psa_c_r_mean/gonzalez_r_mean": statistics.mean(value["psa_c_r"]) / statistics.mean(value["gonzalez_r"]),
-        }
-
     output_path = os.path.join(
         os.path.dirname(__file__),
         "..",
         "results",
         "overview",
-        "metrics_comparison.json"
+        "metrics_comparison.csv"
     )
 
-    with open(output_path, "w") as f:
-        json.dump(analyzed, f, indent=2)
+    fieldnames = [
+        "metric",
+        "gonzalez_r_mean",
+        "da_r_mean/gonzalez_r_mean",
+        "psa_r_mean/gonzalez_r_mean",
+    ]
+
+    with open(output_path, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+
+        for metric, value in results.items():
+            gonzalez_r_mean = statistics.mean(value["gonzalez_r"])
+            writer.writerow({
+                "metric": metric,
+                "gonzalez_r_mean": gonzalez_r_mean,
+                "da_r_mean/gonzalez_r_mean": statistics.mean(value["da_r"]) / gonzalez_r_mean,
+                "psa_r_mean/gonzalez_r_mean": statistics.mean(value["psa_r"]) / gonzalez_r_mean,
+            })
